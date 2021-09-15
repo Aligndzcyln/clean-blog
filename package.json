@@ -1,0 +1,29 @@
+{
+  "name": "clean-blog",
+  "version": "1.0.0",
+  "description": "blog",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aligndzcyln/clean-blog.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "Ali Gündüz Ceylan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aligndzcyln/clean-blog/issues"
+  },
+  "homepage": "https://github.com/Aligndzcyln/clean-blog#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
