@@ -35,6 +35,13 @@ app.get('/post', (req, res) => {
     res.render('post')
 })
 
+app.get('/articles/:id', async (req, res) => {
+    const article = await Article.findById(req.params.id)
+    res.render('post', {
+        article
+    })
+})
+
 app.post('/articles', async (req, res) => {
     await Article.create(req.body)
     res.redirect('/')
