@@ -110,7 +110,8 @@
           <div class="text-center">
             <a href="/articles/edit/<%= article._id %>" type="submit" class="btn btn-primary"
               id="updateMessageButton">Update</a>
-            <button type="submit" class="btn btn-primary" id="deleteMessageButton">Delete</button>
+            <a href="/articles/<%= article._id %>?_method=DELETE" type="submit" class="btn btn-primary"
+              id="deleteMessageButton" onclick="return confirm('Are you sure')">Delete</a>
           </div>
 
         </div>

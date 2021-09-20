@@ -3,12 +3,13 @@ const path = require('path')
 const ejs = require('ejs')
 const mongoose = require('mongoose');
 const Article = require('./models/Article')
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
+const { findOne } = require('./models/Article');
 
 const app = express();
 
 //Connect db
-mongoose.connect('mongodb://localhost/clean-blog-test-db', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/clean-blog-test-db', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 
 //Template engine
 app.set('view engine', 'ejs')
@@ -17,7 +18,9 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method', {
+    methods: ['POST', 'GET']
+}))
 
 //Routes
 app.get('/', async (req, res) => {
@@ -62,6 +65,11 @@ app.put('/articles/:id', async (req, res) => {
     article.save();
 
     res.redirect(`/articles/${req.params.id}`)
+})
+
+app.delete('/articles/:id', async (req, res) => {
+    await Article.findByIdAndRemove(req.params.id)
+    res.redirect('/')
 })
 
 
