@@ -2,10 +2,10 @@ const express = require('express');
 const path = require('path')
 const ejs = require('ejs')
 const mongoose = require('mongoose');
-const Article = require('./models/Article')
 const methodOverride = require('method-override');
 const { findOne } = require('./models/Article');
 const articleController = require('./controllers/articleController')
+const pageController = require('./controllers/pageController')
 
 const app = express();
 
@@ -24,30 +24,16 @@ app.use(methodOverride('_method', {
 }))
 
 //Routes
-app.get('/', articleController.getAllArticles)
-app.get('/about', (req, res) => {
-    res.render('about')
-})
-app.get('/add_post', (req, res) => {
-    res.render('add_post')
-})
-app.get('/post', (req, res) => {
-    res.render('post')
-})
+app.get('/', articleController.getAllArticles);
+app.get('/articles/:id', articleController.getArticle);
+app.post('/articles', articleController.createArticle);
+app.put('/articles/:id', articleController.updateArticle);
+app.delete('/articles/:id', articleController.deleteArticle);
 
-app.get('/articles/:id', articleController.getArticle)
-
-app.post('/articles', articleController.createArticle)
-
-app.get('/articles/edit/:id', async (req, res) => {
-    const article = await Article.findOne({ _id: req.params.id })
-    res.render('edit', {
-        article
-    })
-})
-app.put('/articles/:id', articleController.updateArticle)
-
-app.delete('/articles/:id', articleController.deleteArticle)
+app.get('/about', pageController.getAboutPage)
+app.get('/add_post', pageController.getAddPage)
+app.get('/post', pageController.getPostPage)
+app.get('/articles/edit/:id', pageController.getEditPage)
 
 
 const port = 3000;
