@@ -3,6 +3,7 @@ const path = require('path')
 const ejs = require('ejs')
 const mongoose = require('mongoose');
 const Article = require('./models/Article')
+const methodOverride = require('method-override')
 
 const app = express();
 
@@ -16,11 +17,12 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(methodOverride('_method'))
 
 //Routes
 app.get('/', async (req, res) => {
     //res.sendFile(path.resolve(__dirname, 'temp/index.html'))
-    const articles = await Article.find({})
+    const articles = await Article.find({}).sort('-dateCreated')
     res.render('index', {
         articles: articles
     })
@@ -45,6 +47,21 @@ app.get('/articles/:id', async (req, res) => {
 app.post('/articles', async (req, res) => {
     await Article.create(req.body)
     res.redirect('/')
+})
+
+app.get('/articles/edit/:id', async (req, res) => {
+    const article = await Article.findOne({ _id: req.params.id })
+    res.render('edit', {
+        article
+    })
+})
+app.put('/articles/:id', async (req, res) => {
+    const article = await Article.findOne({ _id: req.params.id });
+    article.name = req.body.name;
+    article.message = req.body.message;
+    article.save();
+
+    res.redirect(`/articles/${req.params.id}`)
 })
 
 
