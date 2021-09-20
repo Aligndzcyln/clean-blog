@@ -5,11 +5,12 @@ const mongoose = require('mongoose');
 const Article = require('./models/Article')
 const methodOverride = require('method-override');
 const { findOne } = require('./models/Article');
+const articleController = require('./controllers/articleController')
 
 const app = express();
 
 //Connect db
-mongoose.connect('mongodb://localhost/clean-blog-test-db', { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect('mongodb://localhost/clean-blog-test-db', { useNewUrlParser: true, useUnifiedTopology: true })
 
 //Template engine
 app.set('view engine', 'ejs')
@@ -23,13 +24,7 @@ app.use(methodOverride('_method', {
 }))
 
 //Routes
-app.get('/', async (req, res) => {
-    //res.sendFile(path.resolve(__dirname, 'temp/index.html'))
-    const articles = await Article.find({}).sort('-dateCreated')
-    res.render('index', {
-        articles: articles
-    })
-})
+app.get('/', articleController.getAllArticles)
 app.get('/about', (req, res) => {
     res.render('about')
 })
@@ -40,17 +35,9 @@ app.get('/post', (req, res) => {
     res.render('post')
 })
 
-app.get('/articles/:id', async (req, res) => {
-    const article = await Article.findById(req.params.id)
-    res.render('post', {
-        article
-    })
-})
+app.get('/articles/:id', articleController.getArticle)
 
-app.post('/articles', async (req, res) => {
-    await Article.create(req.body)
-    res.redirect('/')
-})
+app.post('/articles', articleController.createArticle)
 
 app.get('/articles/edit/:id', async (req, res) => {
     const article = await Article.findOne({ _id: req.params.id })
@@ -58,19 +45,9 @@ app.get('/articles/edit/:id', async (req, res) => {
         article
     })
 })
-app.put('/articles/:id', async (req, res) => {
-    const article = await Article.findOne({ _id: req.params.id });
-    article.name = req.body.name;
-    article.message = req.body.message;
-    article.save();
+app.put('/articles/:id', articleController.updateArticle)
 
-    res.redirect(`/articles/${req.params.id}`)
-})
-
-app.delete('/articles/:id', async (req, res) => {
-    await Article.findByIdAndRemove(req.params.id)
-    res.redirect('/')
-})
+app.delete('/articles/:id', articleController.deleteArticle)
 
 
 const port = 3000;
