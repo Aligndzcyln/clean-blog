@@ -2,11 +2,23 @@ const Article = require('../models/Article')
 
 
 exports.getAllArticles = async (req, res) => {
-    //res.sendFile(path.resolve(__dirname, 'temp/index.html'))
-    const articles = await Article.find({}).sort('-dateCreated');
+
+    const page = req.query.page || 1;
+    const photosPerpage = 3;
+    const totalPhotos = await Article.find().countDocuments();
+
+    const articles = await Article.find({})
+        .sort('-dateCreated')
+        .skip((page - 1) * photosPerpage)
+        .limit(photosPerpage)
+
     res.render('index', {
-        articles: articles
+        articles: articles,
+        current: page,
+        pages: Math.ceil(totalPhotos / photosPerpage)
     })
+
+    // res.sendFile(path.resolve(__dirname, 'temp/index.html'))
 }
 
 exports.getArticle = async (req, res) => {
@@ -17,8 +29,8 @@ exports.getArticle = async (req, res) => {
 }
 
 exports.createArticle = async (req, res) => {
-    await Article.create(req.body)
-    res.redirect('/')
+    await Article.create(req.body);
+    res.redirect('/');
 }
 
 exports.updateArticle = async (req, res) => {
@@ -27,10 +39,10 @@ exports.updateArticle = async (req, res) => {
     article.message = req.body.message;
     article.save();
 
-    res.redirect(`/articles/${req.params.id}`)
+    res.redirect(`/articles/${req.params.id}`);
 }
 
 exports.deleteArticle = async (req, res) => {
-    await Article.findByIdAndRemove(req.params.id)
-    res.redirect('/')
+    await Article.findByIdAndRemove(req.params.id);
+    res.redirect('/');
 }

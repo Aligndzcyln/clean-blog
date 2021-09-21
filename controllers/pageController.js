@@ -5,7 +5,7 @@ exports.getAboutPage = (req, res) => {
 }
 
 exports.getAddPage = (req, res) => {
-    res.render('add_post')
+    res.render('add_post');
 }
 
 exports.getEditPage = async (req, res) => {
@@ -16,5 +16,5 @@ exports.getEditPage = async (req, res) => {
 }
 
 exports.getPostPage = (req, res) => {
-    res.render('post')
+    res.render('post');
 }

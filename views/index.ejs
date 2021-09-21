@@ -44,7 +44,13 @@
               <% } %>
                 <!-- Pager -->
                 <div class="clearfix">
-                  <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+                  <% if(pages> 0){ %>
+                    <% if(pages==current){ %>
+                      <a class="btn btn-primary float-right">You are on the last page</a>
+                      <% } else { %>
+                        <a class="btn btn-primary float-right" href="/?page=<%= current+1 %>">Older posts &rarr;</a>
+                        <% } %>
+                          <% } %>
                 </div>
           </div>
         </div>
