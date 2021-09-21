@@ -10,7 +10,7 @@ const pageController = require('./controllers/pageController');
 const app = express();
 
 //Connect db
-mongoose.connect('mongodb+srv://agc:Lg2gnk5NM6Fggf28@cluster0.2ou3y.mongodb.net/clean-blog-db?retryWrites=true&w=majority',
+mongoose.connect(`mongodb+srv://agc:${process.env.PASSWORD}@cluster0.2ou3y.mongodb.net/clean-blog-db?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
